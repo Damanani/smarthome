@@ -3,206 +3,122 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ESP32 POWER Monitor</title>
-
-    <!-- Font Awesome for icons -->
+    <title>ESP32 Power Monitor</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      integrity="sha512-pVPDvN6sLm+ZT+jKcKOTz5aWQ0h1X1t5Kp1lmJGKV9nP+0PbBzJGK4xCwTOh9I4UPuQ+dx3xX0XrQ5f+3kd9cw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
-
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-      /* Reset & base */
-      * {
-        box-sizing: border-box;
-      }
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #f0f2f5;
+        background: #f8f9fa;
         margin: 0;
-        padding: 0 15px 30px;
+        padding: 20px;
         color: #333;
-        line-height: 1.4;
       }
 
-      /* App bar */
       header {
-        background-color: #007bff;
-        color: white;
-        padding: 15px 20px;
-        font-size: 1.5rem;
-        font-weight: 700;
         display: flex;
         align-items: center;
-        gap: 12px;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        border-radius: 0 0 10px 10px;
-        position: sticky;
-        top: 0;
-        z-index: 999;
+        gap: 10px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 25px;
       }
       header i {
-        font-size: 1.8rem;
+        color: #ff4c4c;
       }
 
-      /* Container */
-      .container {
-        max-width: 700px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 12px;
-        padding: 20px 25px;
-        box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
       }
 
-      /* Title */
-      h2 {
+      .card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
         text-align: center;
-        margin-bottom: 25px;
-        color: #222;
-        font-size: 1.8rem;
       }
 
-      /* Monitoring items */
-      .item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
-        font-size: 1.15rem;
-      }
-      .item:last-child {
-        border-bottom: none;
-      }
-      .item i {
-        color: #007bff;
-        min-width: 30px;
+      .card i {
         font-size: 1.5rem;
-        text-align: center;
+        margin-bottom: 10px;
+        color: #666;
       }
+
+      .label {
+        font-size: 0.9rem;
+        color: #888;
+        margin-top: 5px;
+      }
+
       .value {
-        font-weight: 700;
-        margin-left: auto;
-        color: #222;
-        min-width: 70px;
-        text-align: right;
-        white-space: nowrap;
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-top: 5px;
       }
 
-      /* Chart container */
       .chart-container {
-        margin-top: 30px;
-        padding-top: 15px;
-        border-top: 1px solid #ddd;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
       }
 
-      /* Responsive Styles */
-      @media (max-width: 768px) {
-        .container {
-          max-width: 100%;
-          padding: 15px 20px;
-          border-radius: 0;
-          box-shadow: none;
-        }
-        h2 {
-          font-size: 1.5rem;
-        }
-        .item {
-          font-size: 1.1rem;
-          gap: 10px;
-          padding: 10px 0;
-        }
-        header {
-          font-size: 1.3rem;
-          padding: 12px 15px;
-          gap: 8px;
-        }
-        header i {
-          font-size: 1.4rem;
-        }
-        .value {
-          min-width: 60px;
-          font-size: 1rem;
-        }
-      }
-
-      @media (max-width: 480px) {
-        body {
-          padding: 0 10px 20px;
-        }
-        .item {
-          flex-wrap: wrap;
-          font-size: 1rem;
-          gap: 8px;
-          padding: 8px 0;
-        }
-        .value {
-          margin-left: 0;
-          min-width: auto;
-          width: 100%;
-          text-align: left;
-          font-size: 1rem;
-        }
+      canvas {
+        width: 100% !important;
+        height: 300px !important;
       }
     </style>
   </head>
   <body>
     <header>
-      <i class="fa-solid fa-bolt"></i>
-      ESP32 Power Monitor
+      <i class="fa-solid fa-plug"></i>
+      Power Monitor
     </header>
 
-    <div class="container">
-      <h2>Data Monitoring dari Firebase</h2>
-
-      <div class="item">
+    <div class="grid">
+      <div class="card">
         <i class="fa-solid fa-bolt"></i>
-        Voltage
-        <span class="value" id="volt">0 V</span>
+        <div class="value" id="volt">0 V</div>
+        <div class="label">Voltage</div>
       </div>
-
-      <div class="item">
+      <div class="card">
+        <i class="fa-solid fa-arrows-left-right"></i>
+        <div class="value" id="curr">0 A</div>
+        <div class="label">Current</div>
+      </div>
+      <div class="card">
         <i class="fa-solid fa-plug"></i>
-        Current
-        <span class="value" id="curr">0 A</span>
+        <div class="value" id="pow">0 W</div>
+        <div class="label">Power</div>
       </div>
-
-      <div class="item">
-        <i class="fa-solid fa-battery-three-quarters"></i>
-        Power
-        <span class="value" id="pow">0 W</span>
+      <div class="card">
+        <i class="fa-solid fa-chart-line"></i>
+        <div class="value" id="ener">0 kWh</div>
+        <div class="label">Energy</div>
       </div>
-
-      <div class="item">
-        <i class="fa-solid fa-clock"></i>
-        Energy
-        <span class="value" id="ener">0 kWh</span>
-      </div>
-
-      <div class="item">
+      <div class="card">
         <i class="fa-solid fa-wave-square"></i>
-        Frequency
-        <span class="value" id="freq">0 Hz</span>
+        <div class="value" id="freq">0 Hz</div>
+        <div class="label">Frequency</div>
       </div>
+      <div class="card">
+        <i class="fa-solid fa-percent"></i>
+        <div class="value" id="pf">0</div>
+        <div class="label">Power Factor</div>
+      </div>
+    </div>
 
-      <div class="item">
-        <i class="fa-solid fa-sliders"></i>
-        Power Factor
-        <span class="value" id="pf">0</span>
-      </div>
-
-      <!-- Chart for Voltage -->
-      <div class="chart-container">
-        <canvas id="voltageChart" height="140"></canvas>
-      </div>
+    <div class="chart-container">
+      <canvas id="voltageChart"></canvas>
     </div>
 
     <!-- Firebase v9 Modular Scripts -->
