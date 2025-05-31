@@ -181,7 +181,7 @@
         const data = snapshot.val();
 
         document.getElementById("voltage").textContent = data.voltage ?? "0";
-        document.getElementById("apparent_power").textContent =
+        document.getElementById("apparentPower").textContent =
           data.apparent_power ?? "0";
         document.getElementById("current_mA").textContent =
           data.current_mA ?? "0";
@@ -193,7 +193,7 @@
         document.getElementById("relayStatus").textContent = data.relay
           ? "ON"
           : "OFF";
-        document.getElementById("reactive_power").textContent =
+        document.getElementById("reactivePower").textContent =
           data.reactive_power ?? "0";
 
         // Update grafik arus
